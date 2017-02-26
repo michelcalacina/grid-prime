@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.samsung.gridprime.R;
+import com.samsung.gridprime.util.Utils;
 
 import java.util.HashMap;
 
@@ -17,9 +18,6 @@ import java.util.HashMap;
 
 public class GridPrimeRecycleAdapter extends
         RecyclerView.Adapter<GridPrimeRecycleAdapter.PrimeViewHolder> {
-
-    // Max size of values allowed. 32767*4(number of bytes by integer) equals 131068 bytes.
-    private final int MAX_ALLOWED_VALUE = 32767;
 
     // For optimal insert and read, HashMap complexity is O(1) without collisions because of control key.
     private HashMap<Integer,Integer> values;
@@ -35,13 +33,13 @@ public class GridPrimeRecycleAdapter extends
         int controlKey = values.size();
 
         // Limit reached must do nothing.
-        if(controlKey == MAX_ALLOWED_VALUE)
+        if(controlKey == Utils.MAX_ALLOWED_VALUE)
             return;
 
         // Only some elements from array must be inserted on values.
-        if(MAX_ALLOWED_VALUE - controlKey < newValues.length) {
+        if(Utils.MAX_ALLOWED_VALUE - controlKey < newValues.length) {
             int temp = controlKey;
-            for(int i=0; i < MAX_ALLOWED_VALUE - temp; i++) {
+            for(int i=0; i < Utils.MAX_ALLOWED_VALUE - temp; i++) {
                 controlKey++;
                 values.put(controlKey, newValues[i]);
             }

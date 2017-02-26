@@ -8,7 +8,6 @@ import java.util.HashSet;
 
 public class CacheControl {
 
-
     private HashSet primeContents = null;
     private HashSet notPrimeContents = null;
 

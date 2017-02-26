@@ -1,5 +1,7 @@
 package com.samsung.gridprime.control;
 
+import com.samsung.gridprime.util.Utils;
+
 import java.util.Random;
 
 /**
@@ -9,30 +11,28 @@ import java.util.Random;
 public class PrimeControl {
 
     private Random random = null;
-    private final int TOTAL_PRIMES_TO_COLLECT;
     private int[] primes;
     private CacheControl cache;
 
-    public PrimeControl(int totalToReturn) {
-        if (totalToReturn <= 0) {
-            TOTAL_PRIMES_TO_COLLECT = 100;
-        } else {
-            TOTAL_PRIMES_TO_COLLECT = totalToReturn;
-        }
+    public PrimeControl() {
         cache = new CacheControl();
-
-        // Following the rule that max prime allowed must be closer than max Integer value.
-        random = new Random(Integer.MAX_VALUE+1);
+        random = new Random();
     }
 
     public int[] generateRandomPrimes() {
-        primes = new int[TOTAL_PRIMES_TO_COLLECT];
+        primes = new int[Utils.MAX_PRIMES_TO_LOAD];
 
-        // Populate every index of array with primes.
+        // Populate array with primes.
         for(int i=0; i < primes.length; i++) {
             boolean foundPrime = false;
+            // Loop until find a prime number.
             while (!foundPrime) {
-                int value = random.nextInt();
+                // Include the upper inter max value and start from 2.
+                int value = random.nextInt(Integer.MAX_VALUE) + 1;
+
+                // For optimize, any even != 2 must be ignored immediately.
+                if (value != 2 && value % 2 == 0)
+                    continue;
 
                 if (cache.containPrime(value)) {
                     primes[i] = value;
@@ -57,7 +57,7 @@ public class PrimeControl {
         return primes;
     }
 
-    public boolean isPrime(int value) {
+    private boolean isPrime(int value) {
         boolean result = true;
 
         if (value == 2)
