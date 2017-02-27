@@ -10,16 +10,25 @@ import java.util.Random;
 
 public class PrimeControl {
 
-    private Random random = null;
+    private static PrimeControl primeControl = null;
+
+    private Random random;
     private int[] primes;
     private CacheControl cache;
 
-    public PrimeControl() {
-        cache = new CacheControl();
-        random = new Random();
+    private PrimeControl(CacheControl cache, Random random) {
+        this.cache = cache;
+        this.random = random;
     }
 
-    public int[] generateRandomPrimes() {
+    public static PrimeControl getInstance() {
+        if (primeControl == null)
+            primeControl = new PrimeControl(new CacheControl(), new Random());
+
+        return primeControl;
+    }
+
+    public synchronized int[] generateRandomPrimes() {
         primes = new int[Utils.MAX_PRIMES_TO_LOAD];
 
         // Populate array with primes.
@@ -28,10 +37,10 @@ public class PrimeControl {
             // Loop until find a prime number.
             while (!foundPrime) {
                 // Include the upper inter max value and start from 2.
-                int value = random.nextInt(Integer.MAX_VALUE) + 1;
+                int value = (int) (Math.random() * ((Integer.MAX_VALUE - 2) + 1)) + 2;
 
                 // For optimize, any even != 2 must be ignored immediately.
-                if (value != 2 && value % 2 == 0)
+                if (value > 2 && value % 2 == 0)
                     continue;
 
                 if (cache.containPrime(value)) {

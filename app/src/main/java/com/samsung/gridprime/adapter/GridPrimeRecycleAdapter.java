@@ -29,7 +29,7 @@ public class GridPrimeRecycleAdapter extends
     }
 
     // Accumulate values on HashMap according user interaction.
-    public void setValues(int[] newValues) {
+    public synchronized void setValues(int[] newValues) {
         int controlKey = values.size();
 
         // Limit reached must do nothing.
@@ -39,7 +39,8 @@ public class GridPrimeRecycleAdapter extends
         // Only some elements from array must be inserted on values.
         if(Utils.MAX_ALLOWED_VALUE - controlKey < newValues.length) {
             int temp = controlKey;
-            for(int i=0; i < Utils.MAX_ALLOWED_VALUE - temp; i++) {
+            int limit = Utils.MAX_ALLOWED_VALUE - temp;
+            for(int i=0; i < limit; i++) {
                 controlKey++;
                 values.put(controlKey, newValues[i]);
             }

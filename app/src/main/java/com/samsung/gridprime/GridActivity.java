@@ -14,17 +14,15 @@ import com.samsung.gridprime.util.Utils;
 public class GridActivity extends AppCompatActivity implements LoadPrimeCallBack {
 
     GridPrimeRecycleAdapter mGridAdapter = null;
-    PrimeControl primeControl = null;
     RecyclerView mGridRecycler = null;
-    LoadPrimeTask loadPrimeTask = null;
+    LoadPrimeTask loadPrimeRunnable = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grid);
 
-        primeControl = new PrimeControl();
-        loadPrimeTask = new LoadPrimeTask(this);
+        loadPrimeRunnable = new LoadPrimeTask(this);
         mGridAdapter = new GridPrimeRecycleAdapter(this);
 
         mGridRecycler = (RecyclerView) findViewById(R.id.rclPrimes);
@@ -36,29 +34,42 @@ public class GridActivity extends AppCompatActivity implements LoadPrimeCallBack
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+            }
 
-                GridLayoutManager glm = (GridLayoutManager) recyclerView.getLayoutManager();
-                int totalItem = glm.getItemCount();
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
 
-                // Must do nothing if reached the maximum size list.
-                if (totalItem == Utils.MAX_ALLOWED_VALUE)
-                    return;
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    GridLayoutManager glm = (GridLayoutManager) recyclerView.getLayoutManager();
+                    int totalItem = glm.getItemCount();
 
-                int lastVisible = glm.findLastVisibleItemPosition();
+                    // Must do nothing if reached the maximum size list.
+                    if (totalItem == Utils.MAX_ALLOWED_VALUE)
+                        return;
 
-                // Scroll up to bottom, load contents before reaching the bottom.
-                if (dy > 0 && totalItem - lastVisible <= 20) {
-                    loadPrimeTask.run();
+                    int lastVisible = glm.findLastVisibleItemPosition();
+
+                    // Load contents before reaching the bottom.
+                    if (totalItem - lastVisible <= Utils.BOUNDARY_TO_LOAD_MORE_ELEMENTS) {
+                        new Thread(loadPrimeRunnable).start();
+                    }
                 }
             }
         });
 
         // Load the initial values.
-        loadPrimeTask.run();
+        new Thread(loadPrimeRunnable).start();
     }
 
     @Override
-    public void onPostExecute(int[] values) {
-        mGridAdapter.setValues(values);
+    public void onPostExecute(final int[] values) {
+
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mGridAdapter.setValues(values);
+            }
+        });
     }
 }

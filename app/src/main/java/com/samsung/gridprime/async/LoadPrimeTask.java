@@ -14,11 +14,14 @@ public class LoadPrimeTask implements Runnable {
 
     public LoadPrimeTask(LoadPrimeCallBack callBack) {
         this.callBack = callBack;
-        primeControl = new PrimeControl();
+        primeControl = PrimeControl.getInstance();
     }
 
     @Override
     public void run() {
+        // Moves the current Thread into the background
+        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+
         callBack.onPostExecute(primeControl.generateRandomPrimes());
     }
 }
