@@ -1,6 +1,6 @@
-package com.samsung.gridprime.control;
+package com.interview.gridprime.control;
 
-import com.samsung.gridprime.util.Utils;
+import com.interview.gridprime.util.Utils;
 
 /**
  * Created by michelcalacina on 25/02/17.
@@ -9,8 +9,6 @@ import com.samsung.gridprime.util.Utils;
 public class PrimeControl {
 
     private static PrimeControl primeControl = null;
-
-    private int[] primes;
 
     private PrimeControl() { }
 
@@ -23,7 +21,7 @@ public class PrimeControl {
     }
 
     public synchronized int[] generateRandomPrimes() {
-        primes = new int[Utils.MAX_PRIMES_TO_LOAD];
+        int[] primes = new int[Utils.MAX_PRIMES_TO_LOAD];
 
         // Populate array with primes.
         for(int i=0; i < primes.length; i++) {

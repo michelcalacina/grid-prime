@@ -1,4 +1,4 @@
-package com.samsung.gridprime;
+package com.interview.gridprime;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -6,16 +6,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.samsung.gridprime.adapter.GridPrimeRecycleAdapter;
-import com.samsung.gridprime.async.LoadPrimeCallBack;
-import com.samsung.gridprime.async.LoadPrimeTask;
-import com.samsung.gridprime.util.Utils;
+import com.interview.gridprime.adapter.GridPrimeRecycleAdapter;
+import com.interview.gridprime.async.LoadPrimeCallBack;
+import com.interview.gridprime.async.LoadPrimeTask;
+import com.interview.gridprime.control.CacheControl;
+import com.interview.gridprime.util.Utils;
 
 public class GridActivity extends AppCompatActivity implements LoadPrimeCallBack {
 
-    GridPrimeRecycleAdapter mGridAdapter = null;
-    RecyclerView mGridRecycler = null;
-    LoadPrimeTask loadPrimeRunnable = null;
+    private GridPrimeRecycleAdapter mGridAdapter = null;
+    private RecyclerView mGridRecycler = null;
+    private LoadPrimeTask loadPrimeRunnable = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class GridActivity extends AppCompatActivity implements LoadPrimeCallBack
                 // Must do nothing if reached the maximum size list.
                 if (lastVisible+1 == Utils.MAX_ALLOWED_SIZE) {
                     mGridRecycler.removeOnScrollListener(this);
-
+                    CacheControl.clearCache();
                     return;
                 }
 

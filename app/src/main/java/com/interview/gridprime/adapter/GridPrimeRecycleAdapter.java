@@ -1,16 +1,15 @@
-package com.samsung.gridprime.adapter;
+package com.interview.gridprime.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.samsung.gridprime.R;
-import com.samsung.gridprime.util.Utils;
-
-import java.util.HashMap;
+import com.interview.gridprime.util.Utils;
+import com.interview.gridprime.R;
 
 /**
  * Created by michelcalacina on 25/02/17.
@@ -19,13 +18,15 @@ import java.util.HashMap;
 public class GridPrimeRecycleAdapter extends
         RecyclerView.Adapter<GridPrimeRecycleAdapter.PrimeViewHolder> {
 
-    // For optimal insert and read, HashMap complexity is O(1) without collisions because of control key.
-    private HashMap<Integer,Integer> values;
+    /** For optimal insert and read, SparseIntArray complexity is O(1),
+     * without collisions because of control key.
+     * **/
+    private SparseIntArray values;
     private LayoutInflater mInflater = null;
 
     public GridPrimeRecycleAdapter(Context context) {
         this.mInflater = LayoutInflater.from(context);
-        values = new HashMap<Integer,Integer>();
+        values = new SparseIntArray();
     }
 
     // Accumulate values on HashMap according user interaction.
@@ -57,13 +58,12 @@ public class GridPrimeRecycleAdapter extends
     @Override
     public PrimeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = mInflater.inflate(R.layout.grid_item, parent, false);
-        PrimeViewHolder holder = new PrimeViewHolder(v);
-        return holder;
+        return new PrimeViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(PrimeViewHolder holder, int position) {
-        holder.tvValue.setText( values.get(position+1).toString() );
+        holder.tvValue.setText( values.get(position+1)+"");
     }
 
     @Override

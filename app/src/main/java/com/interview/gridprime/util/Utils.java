@@ -1,7 +1,6 @@
-package com.samsung.gridprime.util;
+package com.interview.gridprime.util;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.design.widget.Snackbar;
 
 /**

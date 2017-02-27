@@ -1,4 +1,4 @@
-package com.samsung.gridprime.async;
+package com.interview.gridprime.async;
 
 /**
  * Created by michelcalacina on 26/02/17.
@@ -7,7 +7,7 @@ package com.samsung.gridprime.async;
 public interface LoadPrimeCallBack {
     /**
      * Returns the array of integers, generated in backgroud task.
-     * @param values
+     * @param values returned.
      */
-    public void onPostExecute(int[] values);
+    void onPostExecute(int[] values);
 }

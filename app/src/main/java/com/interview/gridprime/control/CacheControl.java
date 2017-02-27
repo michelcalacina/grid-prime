@@ -1,4 +1,4 @@
-package com.samsung.gridprime.control;
+package com.interview.gridprime.control;
 
 import java.util.HashSet;
 
@@ -10,13 +10,13 @@ import java.util.HashSet;
  * rarely repeat it self, but not prime occour few times.
  */
 
-public final class CacheControl {
+  public final class CacheControl {
 
     private static final int MAX_CHACHE_SIZE = 10000;
-    private static HashSet notPrimeContents = null;
+    private static HashSet<Integer> notPrimeContents = null;
 
     public static void build() {
-        notPrimeContents = new HashSet();
+        notPrimeContents = new HashSet<>();
     }
 
     public static boolean containNotPrime(int value) {

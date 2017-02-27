@@ -1,7 +1,6 @@
-package com.samsung.gridprime.async;
+package com.interview.gridprime.async;
 
-import com.samsung.gridprime.control.PrimeControl;
-import com.samsung.gridprime.util.Utils;
+import com.interview.gridprime.control.PrimeControl;
 
 /**
  * Created by michelcalacina on 26/02/17.
@@ -9,8 +8,8 @@ import com.samsung.gridprime.util.Utils;
 
 public class LoadPrimeTask implements Runnable {
 
-    private LoadPrimeCallBack callBack;
-    private PrimeControl primeControl;
+    private final LoadPrimeCallBack callBack;
+    private final PrimeControl primeControl;
 
     public LoadPrimeTask(LoadPrimeCallBack callBack) {
         this.callBack = callBack;
