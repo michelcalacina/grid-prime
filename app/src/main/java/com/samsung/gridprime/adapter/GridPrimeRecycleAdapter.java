@@ -33,13 +33,13 @@ public class GridPrimeRecycleAdapter extends
         int controlKey = values.size();
 
         // Limit reached must do nothing.
-        if(controlKey == Utils.MAX_ALLOWED_VALUE)
+        if(controlKey == Utils.MAX_ALLOWED_SIZE)
             return;
 
         // Only some elements from array must be inserted on values.
-        if(Utils.MAX_ALLOWED_VALUE - controlKey < newValues.length) {
+        if(Utils.MAX_ALLOWED_SIZE - controlKey < newValues.length) {
             int temp = controlKey;
-            int limit = Utils.MAX_ALLOWED_VALUE - temp;
+            int limit = Utils.MAX_ALLOWED_SIZE - temp;
             for(int i=0; i < limit; i++) {
                 controlKey++;
                 values.put(controlKey, newValues[i]);

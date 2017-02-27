@@ -4,31 +4,32 @@ import java.util.HashSet;
 
 /**
  * Created by michelcalacina on 26/02/17.
+ * This class help to speed up search for prime numbers,
+ * this do not cache prime numbers, it caches not prime even numbers only.
+ * After many tests was seem that prime numbers in range of Integer.MAX_VALUE,
+ * rarely repeat it self, but not prime occour few times.
  */
 
-public class CacheControl {
+public final class CacheControl {
 
-    private HashSet primeContents = null;
-    private HashSet notPrimeContents = null;
+    private static final int MAX_CHACHE_SIZE = 10000;
+    private static HashSet notPrimeContents = null;
 
-    public CacheControl() {
-        this.primeContents = new HashSet();
-        this.notPrimeContents = new HashSet();
+    public static void build() {
+        notPrimeContents = new HashSet();
     }
 
-    public boolean containPrime(int value) {
-        return primeContents.contains(value);
-    }
-
-    public boolean containNotPrime(int value) {
+    public static boolean containNotPrime(int value) {
         return notPrimeContents.contains(value);
     }
 
-    public void setPrimeContent(int value) {
-        this.primeContents.add(value);
+    public static void setNotPrimeContent(int value) {
+        if (notPrimeContents.size() >= MAX_CHACHE_SIZE)
+            notPrimeContents.clear();
+        notPrimeContents.add(value);
     }
 
-    public void setNotPrimeContent(int value) {
-        this.notPrimeContents.add(value);
+    public static void clearCache() {
+        notPrimeContents.clear();
     }
 }

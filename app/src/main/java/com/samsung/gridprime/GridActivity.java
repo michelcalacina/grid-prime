@@ -1,6 +1,7 @@
 package com.samsung.gridprime;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import com.samsung.gridprime.adapter.GridPrimeRecycleAdapter;
 import com.samsung.gridprime.async.LoadPrimeCallBack;
 import com.samsung.gridprime.async.LoadPrimeTask;
-import com.samsung.gridprime.control.PrimeControl;
 import com.samsung.gridprime.util.Utils;
 
 public class GridActivity extends AppCompatActivity implements LoadPrimeCallBack {
@@ -34,32 +34,44 @@ public class GridActivity extends AppCompatActivity implements LoadPrimeCallBack
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                int lastVisible = ((GridLayoutManager)recyclerView.getLayoutManager())
+                        .findLastVisibleItemPosition();
+                if (dy > 0 && lastVisible+1 == Utils.MAX_ALLOWED_SIZE) {
+                    Utils.showSnackBarMessage("Reach Max allowed size, 32767 primes found."
+                            , Snackbar.LENGTH_SHORT
+                            , GridActivity.this);
+                }
             }
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                    GridLayoutManager glm = (GridLayoutManager) recyclerView.getLayoutManager();
-                    int totalItem = glm.getItemCount();
+                GridLayoutManager glm = (GridLayoutManager) recyclerView.getLayoutManager();
+                int lastVisible = glm.findLastVisibleItemPosition();
+                int totalItem = glm.getItemCount();
 
-                    // Must do nothing if reached the maximum size list.
-                    if (totalItem == Utils.MAX_ALLOWED_VALUE)
-                        return;
+                // Must do nothing if reached the maximum size list.
+                if (lastVisible+1 == Utils.MAX_ALLOWED_SIZE) {
+                    mGridRecycler.removeOnScrollListener(this);
 
-                    int lastVisible = glm.findLastVisibleItemPosition();
+                    return;
+                }
 
-                    // Load contents before reaching the bottom.
-                    if (totalItem - lastVisible <= Utils.BOUNDARY_TO_LOAD_MORE_ELEMENTS) {
-                        new Thread(loadPrimeRunnable).start();
-                    }
+                switch (newState) {
+                    case RecyclerView.SCROLL_STATE_IDLE:
+                        onScrollIdle(totalItem, lastVisible);
+                        break;
+                    case RecyclerView.SCROLL_STATE_DRAGGING:
+                        onScrollDraging(totalItem, lastVisible);
+                        break;
                 }
             }
         });
 
         // Load the initial values.
         new Thread(loadPrimeRunnable).start();
+        Utils.showSnackBarMessage("Loading...", Snackbar.LENGTH_LONG, this);
     }
 
     @Override
@@ -69,7 +81,23 @@ public class GridActivity extends AppCompatActivity implements LoadPrimeCallBack
             @Override
             public void run() {
                 mGridAdapter.setValues(values);
+                setTitle("Grid Prime - Total: " + mGridRecycler.getLayoutManager().getItemCount());
             }
         });
+    }
+
+    // If user try to access elements not load yet, show Snackbar to inform loading.
+    private void onScrollDraging(int totalItem, int lastVisible) {
+        if (lastVisible+1 == totalItem) {
+            Utils.showSnackBarMessage("Fetching more primes!", Snackbar.LENGTH_SHORT
+                    , GridActivity.this);
+        }
+    }
+
+    // After scroll stop, verify if need to load more, to prevent wait loading content.
+    private void onScrollIdle(int totalItem, int lastVisible) {
+        if (totalItem - lastVisible <= Utils.BOUNDARY_TO_LOAD_MORE_ELEMENTS) {
+            new Thread(loadPrimeRunnable).start();
+        }
     }
 }

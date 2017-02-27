@@ -2,8 +2,6 @@ package com.samsung.gridprime.control;
 
 import com.samsung.gridprime.util.Utils;
 
-import java.util.Random;
-
 /**
  * Created by michelcalacina on 25/02/17.
  */
@@ -12,19 +10,15 @@ public class PrimeControl {
 
     private static PrimeControl primeControl = null;
 
-    private Random random;
     private int[] primes;
-    private CacheControl cache;
 
-    private PrimeControl(CacheControl cache, Random random) {
-        this.cache = cache;
-        this.random = random;
-    }
+    private PrimeControl() { }
 
     public static PrimeControl getInstance() {
-        if (primeControl == null)
-            primeControl = new PrimeControl(new CacheControl(), new Random());
-
+        if (primeControl == null) {
+            primeControl = new PrimeControl();
+            CacheControl.build();
+        }
         return primeControl;
     }
 
@@ -43,22 +37,15 @@ public class PrimeControl {
                 if (value > 2 && value % 2 == 0)
                     continue;
 
-                if (cache.containPrime(value)) {
-                    primes[i] = value;
-                    foundPrime = true;
-                    continue;
-                }
-
-                if (cache.containNotPrime(value)) {
+                if (CacheControl.containNotPrime(value)) {
                     continue;
                 }
 
                 if (isPrime(value)) {
                     primes[i] = value;
-                    cache.setPrimeContent(value);
                     foundPrime = true;
                 } else {
-                    cache.setNotPrimeContent(value);
+                    CacheControl.setNotPrimeContent(value);
                 }
             }
         }
@@ -82,5 +69,4 @@ public class PrimeControl {
 
         return result;
     }
-
 }
