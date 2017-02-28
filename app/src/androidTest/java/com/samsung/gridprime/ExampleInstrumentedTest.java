@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.samsung.gridprime", appContext.getPackageName());
+        assertEquals("com.interview.gridprime", appContext.getPackageName());
     }
 }

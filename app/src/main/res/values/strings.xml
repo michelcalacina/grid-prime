@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Grid Prime</string>
+    <string name="total_loaded">PRIMES:</string>
+    <string name="reach_max_allowed">Reach Max allowed size of primes.</string>
+    <string name="loading">Loading&#8230;</string>
+    <string name="fetching_more">Fetching prime numbers, just a second!</string>
+    <string name="auto_scroll">Auto scroll</string>
 </resources>

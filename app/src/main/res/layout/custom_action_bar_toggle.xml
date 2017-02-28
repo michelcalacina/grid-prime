@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content" android:paddingTop="10dp">
+
+    <TextView
+        android:id="@+id/tvCountLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:labelFor="@+id/tvCountTotal"
+        android:text="@string/total_loaded"
+        android:textSize="@dimen/action_bar_primes"/>
+
+    <TextView
+        android:id="@+id/tvCountTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/tvCountLabel"
+        android:textStyle="bold"
+        android:textSize="@dimen/action_bar_primes"
+        android:text="0"
+        android:layout_marginStart="4dp"/>
+
+    <TextView
+        android:id="@+id/tvSwitchLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/auto_scroll"
+        android:labelFor="@+id/scAutoScroll"
+        android:layout_toStartOf="@+id/scAutoScroll"
+        android:textSize="@dimen/action_bar_primes"
+        android:layout_marginEnd="5dp"/>
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/scAutoScroll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>

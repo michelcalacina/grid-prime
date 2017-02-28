@@ -3,6 +3,9 @@ package com.interview.gridprime.async;
 import com.interview.gridprime.control.PrimeControl;
 
 /**
+ * Implements the Runnable interface
+ * that runs on background during prime numbers generation.
+ *
  * Created by michelcalacina on 26/02/17.
  */
 

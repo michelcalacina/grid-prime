@@ -12,6 +12,9 @@ import com.interview.gridprime.util.Utils;
 import com.interview.gridprime.R;
 
 /**
+ * This Adapter Extends RecyclerView Adapter
+ * for optimal performance with large values.
+ *
  * Created by michelcalacina on 25/02/17.
  */
 
@@ -22,7 +25,7 @@ public class GridPrimeRecycleAdapter extends
      * without collisions because of control key.
      * **/
     private SparseIntArray values;
-    private LayoutInflater mInflater = null;
+    private final LayoutInflater mInflater;
 
     public GridPrimeRecycleAdapter(Context context) {
         this.mInflater = LayoutInflater.from(context);

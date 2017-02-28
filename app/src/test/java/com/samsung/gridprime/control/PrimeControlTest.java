@@ -9,6 +9,8 @@ import org.junit.Test;
 import java.util.Arrays;
 
 /**
+ * Unity test class, to validate prime numbers generation.
+ *
  * Created by michelcalacina on 27/02/17.
  */
 

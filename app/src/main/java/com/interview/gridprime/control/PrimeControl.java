@@ -3,6 +3,9 @@ package com.interview.gridprime.control;
 import com.interview.gridprime.util.Utils;
 
 /**
+ * Implements the logic business that handles
+ * prime numbers generation.
+ *
  * Created by michelcalacina on 25/02/17.
  */
 
@@ -28,12 +31,17 @@ public class PrimeControl {
             boolean foundPrime = false;
             // Loop until find a prime number.
             while (!foundPrime) {
-                // Include the upper inter max value and start from 2.
-                int value = (int) (Math.random() * ((Integer.MAX_VALUE - 2) + 1)) + 2;
+                int value = generateRandomValue();
 
                 // For optimize, any even != 2 must be ignored immediately.
                 if (value > 2 && value % 2 == 0)
                     continue;
+
+                if (CacheControl.containPrime(value)) {
+                    primes[i] = value;
+                    foundPrime = true;
+                    continue;
+                }
 
                 if (CacheControl.containNotPrime(value)) {
                     continue;
@@ -41,6 +49,7 @@ public class PrimeControl {
 
                 if (isPrime(value)) {
                     primes[i] = value;
+                    CacheControl.setPrimeNumber(value);
                     foundPrime = true;
                 } else {
                     CacheControl.setNotPrimeContent(value);
@@ -66,5 +75,45 @@ public class PrimeControl {
         }
 
         return result;
+    }
+
+    /**
+     * This algorithm optimizes the random aproach
+     * because the Math.random() method is not efficiente enought
+     * when working with big number, if digit deterministic have
+     * nine or ten digits, it bring values that has this digits approximately
+     *
+     * @return random value;
+     */
+    private int generateRandomValue() {
+        int keyRandom = (int) (Math.random() * 7);
+        int maxDecimalSize = 0;
+        switch (keyRandom) {
+            case 0:
+                maxDecimalSize = 10000;
+                break;
+            case 1:
+                maxDecimalSize = 100000;
+                break;
+            case 2:
+                maxDecimalSize = 1000000;
+                break;
+            case 3:
+                maxDecimalSize = 10000000;
+                break;
+            case 4:
+                maxDecimalSize = 100000000;
+                break;
+            case 5:
+                maxDecimalSize = 1000000000;
+                break;
+            case 6:
+                maxDecimalSize = Integer.MAX_VALUE;
+                break;
+
+        }
+
+        // Include the upper max decimal size generated value, and start from 2.
+        return (int) (Math.random() * ((maxDecimalSize - 2) + 1)) + 2;
     }
 }
