@@ -32,6 +32,11 @@ public class GridPrimeRecycleAdapter extends
         values = new SparseIntArray();
     }
 
+    // Added to provide total datas available.
+    public int countDatas() {
+        return values.size();
+    }
+
     // Accumulate values on HashMap according user interaction.
     public synchronized void setValues(int[] newValues) {
         int controlKey = values.size();
@@ -66,12 +71,15 @@ public class GridPrimeRecycleAdapter extends
 
     @Override
     public void onBindViewHolder(PrimeViewHolder holder, int position) {
-        holder.tvValue.setText( values.get(position+1)+"");
+        if (position < values.size())
+            holder.tvValue.setText( values.get(position+1)+"");
+        else
+            holder.tvValue.setText("");
     }
 
     @Override
     public int getItemCount() {
-        return values.size();
+        return Utils.MAX_ALLOWED_SIZE;
     }
 
     class PrimeViewHolder extends RecyclerView.ViewHolder {

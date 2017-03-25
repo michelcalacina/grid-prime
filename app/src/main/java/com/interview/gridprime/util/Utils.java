@@ -17,7 +17,7 @@ public final class Utils {
     public static final int MAX_ALLOWED_SIZE = 32767;
 
     // After this value is reached after scroll down, init load data.
-    public static final int BOUNDARY_TO_LOAD_MORE_ELEMENTS = MAX_PRIMES_TO_LOAD / 2;
+    public static final int BOUNDARY_TO_LOAD_MORE_ELEMENTS = MAX_PRIMES_TO_LOAD - 2;
 
     public static void showSnackBarMessage(String msg, int length, Activity activity) {
         Snackbar.make(activity.findViewById(android.R.id.content)
