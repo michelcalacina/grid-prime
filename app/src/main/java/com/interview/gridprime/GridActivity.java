@@ -89,12 +89,16 @@ public class GridActivity extends AppCompatActivity implements LoadPrimeCallBack
                     return;
                 }
 
+                // Force verification on each state of scroll.
                 switch (newState) {
                     case RecyclerView.SCROLL_STATE_IDLE:
-                        onScrollIdle(totalItem, lastVisible);
+                        loadDatas(lastVisible);
                         break;
                     case RecyclerView.SCROLL_STATE_DRAGGING:
-                        onScrollDragging(totalItem, lastVisible);
+                        loadDatas(lastVisible);
+                        break;
+                    case RecyclerView.SCROLL_STATE_SETTLING:
+                        loadDatas(lastVisible);
                         break;
                 }
             }
@@ -114,22 +118,33 @@ public class GridActivity extends AppCompatActivity implements LoadPrimeCallBack
             @Override
             public void run() {
                 mGridAdapter.setValues(values);
-                tvCount.setText(mGridLayoutManager.getItemCount()+"");
+                tvCount.setText(mGridAdapter.countDatas()+"");
             }
         });
     }
 
+    // Removed after refactory, to accomplish scenario without load.
     // If user try to access elements not load yet, show Snackbar to inform loading.
-    private void onScrollDragging(int totalItem, int lastVisible) {
+    /*private void onScrollDragging(int totalItem, int lastVisible) {
         if (lastVisible+1 == totalItem) {
             Utils.showSnackBarMessage(getString(R.string.fetching_more), Snackbar.LENGTH_SHORT
                     , GridActivity.this);
+        }
+
+        if ((mGridAdapter.countDatas() - lastVisible+1) <= Utils.BOUNDARY_TO_LOAD_MORE_ELEMENTS) {
+            new Thread(loadPrimeRunnable).start();
         }
     }
 
     // After scroll stop, verify if need to load more, to prevent wait loading content.
     private void onScrollIdle(int totalItem, int lastVisible) {
-        if ((totalItem - lastVisible+1) <= Utils.BOUNDARY_TO_LOAD_MORE_ELEMENTS) {
+        if ((mGridAdapter.countDatas() - lastVisible+1) <= Utils.BOUNDARY_TO_LOAD_MORE_ELEMENTS) {
+            new Thread(loadPrimeRunnable).start();
+        }
+    }*/
+
+    private void loadDatas(int lastVisible) {
+        if ((mGridAdapter.countDatas() - lastVisible+1) <= Utils.BOUNDARY_TO_LOAD_MORE_ELEMENTS) {
             new Thread(loadPrimeRunnable).start();
         }
     }
